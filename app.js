@@ -7,7 +7,7 @@ const path = require('path');
 const util = require("util");
 // Setup variable objects
 const app = express();
-const PORT = process.env.port || 3001;
+const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({
