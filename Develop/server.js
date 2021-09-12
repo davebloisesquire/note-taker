@@ -38,6 +38,20 @@ const readAndAppend = (content, file) => {
   });
 };
 
+const readAndDelete = (noteId, file) => {
+  fs.readFile(file, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedData = JSON.parse(data);
+      const specifiedNote = parsedData.find( ({id}) => id === noteId );
+      const indexById = parsedData.indexOf(specifiedNote);
+      parsedData.splice(indexById, 1);
+      writeToFile(file, parsedData);
+    }
+  });
+};
+
 // Random id generator
 function uuid() {
   return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -61,7 +75,10 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   console.info(`${req.method} request received to submit new notes`);
-  const { title, text } = req.body;
+  const {
+    title,
+    text
+  } = req.body;
 
   if (title && text) {
     const newNote = {
@@ -80,6 +97,11 @@ app.post('/api/notes', (req, res) => {
   }
 });
 
+app.delete('api/notes/:id', (req, res) => {
+  const noteId = req.params.id
+  console.log(`Deleting ${noteId} from notes.`);
+  readAndDelete(noteId, './db/db.json');
+})
 
 // LISTENING INDICATOR
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
