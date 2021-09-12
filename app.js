@@ -21,10 +21,11 @@ app.use(express.static('public'));
 //read
 const readFromFile = util.promisify(fs.readFile);
 //write
-const writeToFile = (destination, content) =>
+const writeToFile = (destination, content) => {
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
-    err ? console.error(err) : console.info(`\nData written to ${destination}`)
-  );
+  err ? console.error(err) : console.info(`\nData written to ${destination}`)
+);
+}
 //read and write
 const readAndAppend = (content, file) => {
   fs.readFile(file, 'utf8', (err, data) => {
@@ -38,35 +39,38 @@ const readAndAppend = (content, file) => {
   });
 };
 
-const readAndDelete = (noteId, file) => {
-  fs.readFile(file, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      const parsedData = JSON.parse(data);
-      const specifiedNote = parsedData.find( ({id}) => id === noteId );
-      const indexById = parsedData.indexOf(specifiedNote);
-      parsedData.splice(indexById, 1);
-      writeToFile(file, parsedData);
-    }
-  });
-};
+// const readAndDelete = (noteId, file) => {
+//   fs.readFile(file, 'utf8', (err, data) => {
+//     if (err) {
+//       console.error(err);
+//     } else {
+//       const parsedData = JSON.parse(data);
+//       const specifiedNote = parsedData.find(({
+//         id
+//       }) => id === noteId);
+//       const indexById = parsedData.indexOf(specifiedNote);
+//       parsedData.splice(indexById, 1);
+//       writeToFile(file, parsedData);
+//     }
+//   });
+// };
 
 // Random id generator
-function uuid() {
-  return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-};
+// function uuid() {
+//   return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+// };
 
 // PAGES PATHS SECTION
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // get "/" and server index.html
 
 // get "/notes" and serve notes.html
-app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')))
+app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, './public/notes.html')))
 
 
 // API CALLS SECTION
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, './public/')));
 // get notes call
 app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received for notes`);
@@ -97,7 +101,7 @@ app.post('/api/notes', (req, res) => {
   }
 });
 
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, './public/')));
 
 // LISTENING INDICATOR
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
