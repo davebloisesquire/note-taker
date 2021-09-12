@@ -16,7 +16,7 @@ app.use(express.urlencoded({
 // Set static pathways
 app.use(express.static('public'));
 
-//UTILITIES (May be modularized later)
+// UTILITIES (May be modularized later)
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 //read
 const readFromFile = util.promisify(fs.readFile);
@@ -60,7 +60,7 @@ function uuid() {
 // PAGES PATHS SECTION
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // get "/" and server index.html
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
+
 // get "/notes" and serve notes.html
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')))
 
@@ -97,11 +97,7 @@ app.post('/api/notes', (req, res) => {
   }
 });
 
-app.delete('api/notes/:id', (req, res) => {
-  const noteId = req.params.id
-  console.log(`Deleting ${noteId} from notes.`);
-  readAndDelete(noteId, './db/db.json');
-})
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 
 // LISTENING INDICATOR
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
