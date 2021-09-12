@@ -61,7 +61,7 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   console.info(`${req.method} request received to submit new notes`);
-  const [{ title, text }] = req.body;
+  const { title, text } = req.body;
 
   if (title && text) {
     const newNote = {
